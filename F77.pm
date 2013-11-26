@@ -727,8 +727,18 @@ sub link_gnufortran_compiler {
         $dir =~ s,/lib$lib.a$,,;
         last;
      } else {
+      # Try the same thing again but looking for the .so file
+      # rather than the .a file.
+      $dir = `$compiler -print-file-name=lib$test.so`;
+       chomp $dir;
+       if (defined $dir && $dir ne "lib$test.so") {
+        $lib = $test; # Found an existing library
+        $dir =~ s,/lib$lib.so$,,;
+        last;
+     } else {
          $dir = "/usr/local/lib";
          $lib = "f2c";
+    }
     }
     }
      return( "-L$dir -L/usr/lib -l$lib -lm" );
