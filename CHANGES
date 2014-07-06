@@ -1,6 +1,14 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.17_01 released Jul 6th 2014
+------------------------------
+
+* Graham Bell's fix to "Add check for GNU fortran .so files as well as .a."
+* Typo fix by dsteinbrunner
+* Fix Cygwin table to use Generic GNU settings
+
+
 v1.17 released Jan 1st 2011
 ---------------------------
 

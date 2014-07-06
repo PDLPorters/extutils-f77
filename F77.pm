@@ -38,7 +38,7 @@ variable F77LIBS, e.g.
 
 =cut
 
-$VERSION = "1.17"; 
+$VERSION = "1.17_01"; 
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
