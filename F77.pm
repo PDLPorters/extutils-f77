@@ -638,7 +638,7 @@ sub testcompiler {
 
 # gcclibs() routine
 #    Return gcc link libs (e.g. -L/usr/local/lib/gcc-lib/sparc-sun-sunos4.1.3_U1/2.7.0 -lgcc)
-#    Note this routine appears to be no longer requred - gcc3 or 4 change? - and is 
+#    Note this routine appears to be no longer required - gcc3 or 4 change? - and is 
 #    NO LONGER CALLED from anywhere in the code. Use of this routine in the future
 #    is DEPRECATED. Retain here just in case this logic is ever needed again,
 #    - Karl Glazebrook Dec/2010
