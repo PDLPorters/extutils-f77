@@ -261,20 +261,12 @@ $F77config{Generic}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','for
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
 ### cygwin ###
-#"-lg2c -lm";
-# needed this on my cygwin system to get things working properly
-sub getcyglink {
-   return join ' ', map {my $lp = `g77 -print-file-name=lib$_.a`;
-			$lp =~ s|/[^/]+$||;
-			 $lp =~ s|L([a-z,A-Z]):|L//$1|g;
-			 "-L$lp -l$_"} qw/g2c m/;
-}
 
-$F77config{Cygwin}{G77}{Trail_} = 1;
-$F77config{Cygwin}{G77}{Compiler} = 'g77';
-$F77config{Cygwin}{G77}{Cflags} = '-O';
-$F77config{Cygwin}{G77}{Link}	= \&getcyglink;
-$F77config{Cygwin}{DEFAULT}	= 'G77';
+$F77config{Cygwin}{GNU}{Trail_} = 1;
+$F77config{Cygwin}{GNU}{Cflags} = '-O';        # <---need this space!
+$F77config{Cygwin}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');    
+$F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
+$F77config{Cygwin}{DEFAULT}     = 'GNU';
 
 ### Linux ###
 
