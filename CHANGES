@@ -1,6 +1,12 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.18 released Jul 7th 2015
+---------------------------
+* resolve rt.cpan.org bug #104495: MinGW now needs to link to libquadmath.a
+  Thanks for the patch, kmx.
+
+
 v1.17_01 released Jul 6th 2014
 ------------------------------
 

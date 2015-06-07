@@ -38,7 +38,7 @@ variable F77LIBS, e.g.
 
 =cut
 
-$VERSION = "1.17_01"; 
+$VERSION = "1.18"; 
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
@@ -122,7 +122,7 @@ $F77config{MinGW}{GFortran}{Link} = sub {
     } else {
         $dir = "/usr/local/lib";
     }    
-    return( "-L$dir -L/usr/lib -lgfortran -lm" );
+    return( "-L$dir -L/usr/lib -lgfortran -lquadmath -lm" );
 };
 
 $F77config{MinGW}{G77}{Trail_} = 1;
