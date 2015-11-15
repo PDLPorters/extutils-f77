@@ -38,7 +38,7 @@ variable F77LIBS, e.g.
 
 =cut
 
-$VERSION = "1.18"; 
+$VERSION = "1.19"; 
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
@@ -733,6 +733,17 @@ sub link_gnufortran_compiler {
     }
     }
     }
+    # Get compiler version number
+    my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/; 
+    my $version = "$1.$2";  # Major version number
+    print "ExtUtils::F77: $compiler version $version.$3\n";
+    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
+    $append = "";
+    if ($compiler eq 'gfortran' && $version >= 4.9) { # Add extra libs for gfortran versions >= 4.9
+#    if ($compiler eq 'gfortran' && $Config{osname} =~ /darwin/ && $Config{osvers} >=14) { # code variant for OS X only
+       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";
+    }
+     return( "-L$dir $append -L/usr/lib -l$lib -lm" );
      return( "-L$dir -L/usr/lib -l$lib -lm" );
 }
 

@@ -1,6 +1,11 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.19 unreleased
+----------------
+
+* Improved gfortran linking on OS X Yosemite+ which avoids PERL_DL_NONLAZY meltdowns
+
 v1.18 released Jul 7th 2015
 ---------------------------
 * resolve rt.cpan.org bug #104495: MinGW now needs to link to libquadmath.a
