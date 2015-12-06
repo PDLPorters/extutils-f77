@@ -423,7 +423,12 @@ sub import {
            $Runtime = ' ' if $^O eq 'VMS';  # <-- need this space!
 	   print "Runtime: $Runtime\n";
            $ok = 1;
-     	   $ok = validate_libs($Runtime) if $flibs ne "";
+           if ($compiler eq 'GNU') {
+              print "Found compiler=$compiler - skipping validation of $Runtime \n";
+             
+     	    }else {  
+     	       $ok = validate_libs($Runtime) if $flibs ne "" ;
+     	   }
 	}
      }else {
      	$Runtime = $ok = "";
