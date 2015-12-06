@@ -423,7 +423,7 @@ sub import {
            $Runtime = ' ' if $^O eq 'VMS';  # <-- need this space!
 	   print "Runtime: $Runtime\n";
            $ok = 1;
-           if ($compiler eq 'GNU') {
+           if ($compiler eq 'GNU') { # Special gfortran case since it seems to have lots of random libs
               print "Found compiler=$compiler - skipping validation of $Runtime \n";
              
      	    }else {  
