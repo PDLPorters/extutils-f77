@@ -1,8 +1,8 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
-v1.19 unreleased
-----------------
+v1.19 released Dec 12th 2015
+----------------------------
 
 * Improved gfortran linking on OS X Yosemite+ which avoids PERL_DL_NONLAZY meltdowns
 
