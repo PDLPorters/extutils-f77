@@ -1,6 +1,11 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.19_1 released Mar 6th 2016
+----------------------------
+
+* Limited Improved gfortran linking on OS X Yosemite+ to OS X
+
 v1.19 released Dec 12th 2015
 ----------------------------
 
