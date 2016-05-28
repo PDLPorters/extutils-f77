@@ -66,10 +66,10 @@ if ($^O =~ /MSWin/i) {
       $fallback_compiler = 'GFortran';
    }
    elsif ($Config{gccversion}) {
-      # Could be either gcc-4.x.x or gcc-3.x.x
+      # Different fortran compiler for gcc-4.x.x (and later) versus gcc-3.x.x
       $gcc = 'gcc';
       @version = split /\./, $Config{gccversion}; 
-      $fallback_compiler = $version[0] == 4 ? 'GFortran' : 'G77';
+      $fallback_compiler = $version[0] >= 4 ? 'GFortran' : 'G77';
       $gfortran = 'gfortran';
    }
    else {
