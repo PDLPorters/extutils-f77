@@ -1,6 +1,16 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.20 released May 28th 2016
+------------------------------
+
+* Apply upstream FreeBSD patch thanks to srezic for submitting
+
+* Fix fallback compiler logic to support gcc-5.x and higher
+
+* Limited Improved gfortran linking on OS X Yosemite+ to OS X
+
+
 v1.19_3 released May 28th 2016
 ------------------------------
 
