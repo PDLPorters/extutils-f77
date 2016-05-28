@@ -1,6 +1,11 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.19_2 released May 28th 2016
+------------------------------
+
+* Fix fallback compiler logic to support gcc-5.x and higher
+
 v1.19_1 released Mar 6th 2016
 ----------------------------
 
