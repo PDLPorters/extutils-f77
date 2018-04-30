@@ -5,4 +5,7 @@ WriteMakefile(
      'AUTHOR'        => 'Karl Glazebrook <karlglazebrook@yahoo.com>',
      'LICENSE'       => 'perl_5',
      'VERSION_FROM'  => 'F77.pm',  
+     PREREQ_PM => {
+      'Text::ParseWords' => 0,
+     },
  );

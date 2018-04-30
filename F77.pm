@@ -3,6 +3,7 @@ package ExtUtils::F77;
 
 use Config;
 use File::Spec;
+use Text::ParseWords;
 
 =head1 NAME
 
@@ -619,7 +620,7 @@ sub find_highest_SC {
 
 sub validate_libs {
    print "$Pkg: Validating $_[0]   ";
-   my @args = split(' ',shift());
+   my @args = shellwords(shift());
    my $pat;
    my $ret = 1;
 
