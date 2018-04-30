@@ -656,7 +656,7 @@ sub testcompiler {
 
    my $ret;
    open(OUT,">$file.f");
-   print OUT "      print *, 'Hello World'\n";
+   print OUT "      write(*,*), 'Hello World'\n";
    print OUT "      end\n";
    close(OUT);
    print "Compiling the test Fortran program...\n";
