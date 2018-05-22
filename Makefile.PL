@@ -11,6 +11,7 @@ WriteMakefile(
   META_MERGE => {
     "meta-spec" => { version => 2 },
     resources => {
+      bugtracker  => 'https://github.com/PDLPorters/extutils-f77/issues',
       repository => {
         type => 'git',
         url => 'git://github.com/PDLPorters/extutils-f77.git',
