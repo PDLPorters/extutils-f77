@@ -21,8 +21,8 @@ This module tries to implement a simple
 A simple self-documenting Perl database of knowledge/code
 for figuring out how to link for various combinations of OS and
 compiler is embedded in the modules Perl code. Please help 
-save the world by sending database entries for
-your system to karl_pgplot@mac.com
+save the world by submitted patches for new database entries for
+your system at L<https://github.com/PDLPorters/extutils-f77>
 
 Note the default on most systems is now to search for a generic 'GNU' compiler
 which can be g77, gfortran or g95 and then find the appropriate link
@@ -798,7 +798,7 @@ sub link_gnufortran_compiler {
 
 =head1 AUTHOR
 
-Karl Glazebrook (karlglazebrook@mac.com).
+Karl Glazebrook
 
 =cut
 
