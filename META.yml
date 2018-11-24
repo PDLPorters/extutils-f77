@@ -1,18 +1,22 @@
---- #YAML:1.0
-name:               ExtUtils-F77
-version:            1.17
-abstract:           ~
-author:  []
-license:            unknown
-distribution_type:  module
+---
+abstract: unknown
+author:
+  - unknown
+build_requires:
+  ExtUtils::MakeMaker: 0
 configure_requires:
-    ExtUtils::MakeMaker:  0
-requires:  {}
-no_index:
-    directory:
-        - t
-        - inc
-generated_by:       ExtUtils::MakeMaker version 6.48
+  ExtUtils::MakeMaker: 0
+dynamic_config: 0
+generated_by: 'ExtUtils::MakeMaker version 6.48, CPAN::Meta::Converter version 2.133380'
+license: unknown
 meta-spec:
-    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
-    version:  1.4
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: ExtUtils-F77
+no_index:
+  directory:
+    - t
+    - inc
+requires:
+  Text::ParseWords: 0
+version: 1.21

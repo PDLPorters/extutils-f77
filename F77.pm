@@ -21,11 +21,11 @@ This module tries to implement a simple
 A simple self-documenting Perl database of knowledge/code
 for figuring out how to link for various combinations of OS and
 compiler is embedded in the modules Perl code. Please help 
-save the world by sending database entries for
-your system to karl_pgplot@mac.com
+save the world by submitted patches for new database entries for
+your system at L<https://github.com/PDLPorters/extutils-f77>
 
 Note the default on most systems is now to search for a generic 'GNU' compiler
-which can be g77, gfortran or g95 and then find the appropriate link
+which can be gfortran, g77 or g95 (in that order) and then find the appropriate link
 libraries automatically. (This is the 'Generic' 'GNU' database entry
 in the code.)
 
@@ -39,7 +39,7 @@ variable F77LIBS, e.g.
 
 =cut
 
-$VERSION = "1.20"; 
+$VERSION = "1.21"; 
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
@@ -258,8 +258,8 @@ $F77config{Solaris}{DEFAULT} = 'F77';
 
 $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
-$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');    
-$F77config{Generic}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
+$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');    
+$F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
 ### cygwin ###
@@ -798,7 +798,7 @@ sub link_gnufortran_compiler {
 
 =head1 AUTHOR
 
-Karl Glazebrook (karlglazebrook@mac.com).
+Karl Glazebrook
 
 =cut
 
