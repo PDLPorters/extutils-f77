@@ -25,7 +25,7 @@ save the world by submitted patches for new database entries for
 your system at L<https://github.com/PDLPorters/extutils-f77>
 
 Note the default on most systems is now to search for a generic 'GNU' compiler
-which can be g77, gfortran or g95 and then find the appropriate link
+which can be gfortran, g77 or g95 (in that order) and then find the appropriate link
 libraries automatically. (This is the 'Generic' 'GNU' database entry
 in the code.)
 
