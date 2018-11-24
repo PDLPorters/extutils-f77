@@ -258,8 +258,8 @@ $F77config{Solaris}{DEFAULT} = 'F77';
 
 $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
-$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');    
-$F77config{Generic}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
+$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');    
+$F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
 ### cygwin ###
