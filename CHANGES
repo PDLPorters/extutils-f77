@@ -4,9 +4,9 @@ ExtUtils::F77 Changes list
 v1.21 unreleased
 ----------------
 
-* Erik's gfortran patch to adjust ordering of searched for compilers (Nov 2018)
+* Adjust ordering of searched for Generic GNU compilers (Nov 2018)
 
-* Addition to pod format content 
+* Addition to pod format content (Nov 2018)
 
 * Use Text::ParseWords not naive split (mohawk2)
 
