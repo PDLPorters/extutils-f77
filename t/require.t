@@ -3,6 +3,8 @@ use warnings;
 use File::Which qw(which);
 use Test::More tests => 3;
 
+$ExtUtils::F77::DEBUG = $ExtUtils::F77::DEBUG = 1;
+
 my $mod = 'ExtUtils::F77';
 use_ok $mod;
 
