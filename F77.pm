@@ -644,11 +644,11 @@ sub link_gnufortran_compiler {
    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
    my $append = "";
    if ( $Config{osname} =~ /darwin/ && $Config{osvers} >= 14
-      && $compiler eq 'gfortran' && $version >= 4.9 ) { # Add extra libs for gfortran versions >= 4.9 and OS X
+      && $compiler eq 'gfortran' && $version >= 4.9 ) {
+      # Add extra libs for gfortran versions >= 4.9 and OS X
       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";
-      return( qq{"-L$dir" $append -L/usr/lib -l$lib -lm} );
    }
-   return( qq{"-L$dir" -L/usr/lib -l$lib -lm} );
+   return( qq{"-L$dir" $append -L/usr/lib -l$lib -lm} );
 }
 
 1; # Return true
