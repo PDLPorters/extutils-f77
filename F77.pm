@@ -1,12 +1,14 @@
 package ExtUtils::F77;
 
+use strict;
+use warnings;
 use Config;
 use File::Spec;
 use Text::ParseWords;
 use File::Which qw(which);
 use List::Util qw(first);
 
-$VERSION = "1.22";
+our $VERSION = "1.22";
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
@@ -28,6 +30,7 @@ my $Trail_ = 1;
 my $Pkg = "";
 my $Compiler = "";
 my $Cflags = "";
+my ($gcc, $gfortran, $fallback_compiler);
 
 ########## Win32 Specific ##############
 
@@ -86,7 +89,7 @@ $F77config{MinGW}{G77}{Link} = sub {
 };
 
 $F77config{MinGW}{GFortran}{Link} = sub {
-   $dir = `$gfortran -print-file-name=libgfortran.a`;
+   my $dir = `$gfortran -print-file-name=libgfortran.a`;
    chomp $dir;
    # Note that -print-file-name returns just the library name
    # if it cant be found - make sure that we only accept the
@@ -113,7 +116,7 @@ $F77config{MinGW}{GFortran}{Cflags}   = '-O';
 # Returns false if it can't find anything sensible.
 
 $F77config{Sunos}{F77}{Link} = sub {
-   $dir = find_highest_SC("/usr/lang/SC*");
+   my $dir = find_highest_SC("/usr/lang/SC*");
    return "" unless $dir; # Failure
    print "$Pkg: Found Fortran latest version lib dir $dir\n";
    return qq{"-L$dir" -lF77 -lm};
@@ -324,7 +327,7 @@ if($^O =~ /Freebsd/i) {
 }
 
 $F77config{Freebsd}{G77}{Link} = sub {
-    $dir = `g77-34 -print-file-name=libg2c.a`;
+    my $dir = `g77-34 -print-file-name=libg2c.a`;
     chomp $dir;
     # Note that -print-file-name returns just the library name
     # if it cant be found - make sure that we only accept the
@@ -339,7 +342,7 @@ $F77config{Freebsd}{G77}{Link} = sub {
 };
 
 $F77config{Freebsd}{GFortran}{Link} = sub {
-    $dir = `$gfortran -print-file-name=libgfortran.a`;
+    my $dir = `$gfortran -print-file-name=libgfortran.a`;
     chomp $dir;
     # Note that -print-file-name returns just the library name
     # if it cant be found - make sure that we only accept the
@@ -406,6 +409,7 @@ sub import {
 
       # Try this combination
 
+      my $ok;
       if ( defined( $compiler ) and defined( $F77config{$system} )){
          my $flibs = get ($F77config{$system}{$compiler}{Link});
          if ($flibs ne "") {
@@ -616,7 +620,7 @@ sub gcclibs {
    if ($isgcc or ($flibs =~ /-lg2c/) or ($flibs =~ /-lf2c/) ) {
       # Don't link to libgcc on MS Windows iff we're using gfortran.
       unless ($fallback_compiler eq 'GFortran' && $^O =~ /MSWin/i) {
-         $gccdir = `$gcc -m32 -print-libgcc-file-name`; chomp $gccdir;
+         my $gccdir = `$gcc -m32 -print-libgcc-file-name`; chomp $gccdir;
          $gccdir =~ s/\/libgcc.a//;
          return qq{ "-L$gccdir" -lgcc};
       } else {
@@ -683,7 +687,7 @@ sub link_gnufortran_compiler {
    my $version = "$1.$2";  # Major version number
    print "ExtUtils::F77: $compiler version $version.$3\n";
    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
-   $append = "";
+   my $append = "";
    if ( $Config{osname} =~ /darwin/ && $Config{osvers} >= 14
       && $compiler eq 'gfortran' && $version >= 4.9 ) { # Add extra libs for gfortran versions >= 4.9 and OS X
       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";
