@@ -21,7 +21,13 @@ warn "\nExtUtils::F77: Version $VERSION\n";
 
 print "Loaded ExtUtils::F77 version $VERSION\n";
 
-%F77config=();
+my %F77config=();
+my $Runtime = "-LSNAFU -lwontwork";
+my $RuntimeOK = 0;
+my $Trail_ = 1;
+my $Pkg = "";
+my $Compiler = "";
+my $Cflags = "";
 
 ########## Win32 Specific ##############
 
@@ -370,15 +376,6 @@ $F77config{Darwin}{DEFAULT}     = 'GNU';
 
 
 ############ End of database is here ############
-
-# Package variables
-
-$Runtime = "-LSNAFU -lwontwork";
-$RuntimeOK = 0;
-$Trail_  = 1;
-$Pkg   = "";
-$Compiler = "";
-$Cflags = "";
 
 sub get; # See below
 
