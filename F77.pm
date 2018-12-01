@@ -78,23 +78,26 @@ else {
 
 # Cflags: Associated compiler flags
 
+sub gfortran_find_libdir {
+  my ($compiler, $lib) = @_;
+  for my $suffix (qw(a so)) {
+    my $dir = `$compiler -print-file-name=lib$lib.$suffix`;
+    chomp $dir;
+    # Note that -print-file-name returns just the library name
+    # if it cant be found - make sure that we only accept the
+    # directory if it returns a proper path (or matches a /)
+    next if !defined $dir or $dir eq $lib;
+    $dir =~ s,/$lib$,,;
+    return $dir;
+  }
+}
+
 $F77config{MinGW}{G77}{Link} = sub {
    my @libs = ('g2c', 'f2c');
    my ($dir, $lib, $test);
    foreach $test (@libs) {
-      $dir = `g77 -print-file-name=lib$test.a`;
-      chomp $dir;
-      # Note that -print-file-name returns just the library name
-      # if it cant be found - make sure that we only accept the
-      # directory if it returns a proper path (or matches a /)
-      if (defined $dir && $dir ne "lib$test.a") {
-         $lib = $test; # Found an existing library
-         last;
-      }
-   }
-   if ( defined $dir  && defined $lib) {
-      $dir =~ s,/lib$lib.a$,,;
-   } else {
+      $dir = gfortran_find_libdir('g77', $test);
+      $lib = $test, last if defined $dir;
       $dir = "/usr/local/lib";
       $lib = "f2c";
    }
@@ -105,17 +108,9 @@ $F77config{MinGW}{G77}{Compiler} = find_in_path('g77','f77','fort77');
 $F77config{MinGW}{G77}{Cflags} = '-O';
 
 $F77config{MinGW}{GFortran}{Link} = sub {
-   my $dir = `$gfortran -print-file-name=libgfortran.a`;
-   chomp $dir;
-   # Note that -print-file-name returns just the library name
-   # if it cant be found - make sure that we only accept the
-   # directory if it returns a proper path (or matches a /)
-   if ( defined $dir ) {
-      $dir =~ s,/libgfortran.a$,,;
-   } else {
-      $dir = "/usr/local/lib";
-   }
-   return( qq{"-L$dir" -L/usr/lib -lgfortran -lquadmath -lm} );
+  my $dir = gfortran_find_libdir($gfortran, 'gfortran');
+  $dir = "/usr/local/lib" if !defined $dir;
+  return( qq{"-L$dir" -L/usr/lib -lgfortran -lquadmath -lm} );
 };
 $F77config{MinGW}{GFortran}{Trail_} = 1;
 $F77config{MinGW}{GFortran}{Compiler} = "$gfortran";
@@ -325,34 +320,18 @@ if($^O =~ /Freebsd/i) {
 }
 
 $F77config{Freebsd}{G77}{Link} = sub {
-    my $dir = `g77-34 -print-file-name=libg2c.a`;
-    chomp $dir;
-    # Note that -print-file-name returns just the library name
-    # if it cant be found - make sure that we only accept the
-    # directory if it returns a proper path (or matches a /)
-    if( defined $dir ) {
-        $dir =~ s,/libg2c.a$,,;
-    } else {
-        $dir = "/usr/local/lib";
-    }
-    return( qq{"-L$dir" -L/usr/lib -lg2c -lm} );
+  my $dir = gfortran_find_libdir('g77-34', 'g2c');
+  $dir = "/usr/local/lib" if !defined $dir;
+  return( qq{"-L$dir" -L/usr/lib -lg2c -lm} );
 };
 $F77config{Freebsd}{G77}{Trail_} = 1;
 $F77config{Freebsd}{G77}{Compiler} = 'g77-34';
 $F77config{Freebsd}{G77}{Cflags} = '-O2';
 
 $F77config{Freebsd}{GFortran}{Link} = sub {
-    my $dir = `$gfortran -print-file-name=libgfortran.a`;
-    chomp $dir;
-    # Note that -print-file-name returns just the library name
-    # if it cant be found - make sure that we only accept the
-    # directory if it returns a proper path (or matches a /)
-    if( defined $dir ) {
-        $dir =~ s,/libgfortran.a$,,;
-    } else {
-        $dir = "/usr/local/lib";
-    }
-    return( qq{"-L$dir" -L/usr/lib -lgfortran -lm} );
+  my $dir = gfortran_find_libdir($gfortran, 'gfortran');
+  $dir = "/usr/local/lib" if !defined $dir;
+  return( qq{"-L$dir" -L/usr/lib -lgfortran -lm} );
 };
 $F77config{Freebsd}{GFortran}{Trail_} = 1;
 $F77config{Freebsd}{GFortran}{Compiler} = "$gfortran";
@@ -653,29 +632,10 @@ sub link_gnufortran_compiler {
    my @libs = @{$complibs{$compiler}};
    my ($dir, $lib, $test);
    foreach $test (@libs) {
-      $dir = `$compiler -print-file-name=lib$test.a`;
-      chomp $dir;
-      # Note that -print-file-name returns just the library name
-      # if it cant be found - make sure that we only accept the
-      # directory if it returns a proper path (or matches a /)
-      if (defined $dir && $dir ne "lib$test.a") {
-         $lib = $test; # Found an existing library
-         $dir =~ s,/lib$lib.a$,,;
-         last;
-      } else {
-         # Try the same thing again but looking for the .so file
-         # rather than the .a file.
-         $dir = `$compiler -print-file-name=lib$test.so`;
-         chomp $dir;
-         if (defined $dir && $dir ne "lib$test.so") {
-            $lib = $test; # Found an existing library
-            $dir =~ s,/lib$lib.so$,,;
-            last;
-         } else {
-            $dir = "/usr/local/lib";
-            $lib = "f2c";
-         }
-      }
+      $dir = gfortran_find_libdir($compiler, $test);
+      $lib = $test, last if defined $dir;
+      $dir = "/usr/local/lib";
+      $lib = "f2c";
    }
    # Get compiler version number
    my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/;
