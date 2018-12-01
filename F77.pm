@@ -35,7 +35,7 @@ can be explicitly overridden by setting the environment
 variable F77LIBS, e.g.
 
   % setenv F77LIBS "-lfoo -lbar"
-  % perl Makefile.PL
+  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
   ...
 
 =cut
