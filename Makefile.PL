@@ -10,6 +10,7 @@ WriteMakefile(
   },
   META_MERGE => {
     "meta-spec" => { version => 2 },
+    dynamic_config => 0,
     resources => {
       bugtracker  => 'https://github.com/PDLPorters/extutils-f77/issues',
       repository => {
