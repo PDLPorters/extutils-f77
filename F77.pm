@@ -6,40 +6,6 @@ use Text::ParseWords;
 use File::Which qw(which);
 use List::Util qw(first);
 
-=head1 NAME
-
-ExtUtils::F77 - Simple interface to F77 libs
-
-=head1 DESCRIPTION
-
-This module tries to figure out how to link C programs with
-Fortran subroutines on your system. Basically one must add a list
-of Fortran runtime libraries. The problem is their location
-and name varies with each OS/compiler combination!
-
-This module tries to implement a simple
-'rule-of-thumb' database for various flavours of UNIX systems.
-A simple self-documenting Perl database of knowledge/code
-for figuring out how to link for various combinations of OS and
-compiler is embedded in the modules Perl code. Please help
-save the world by submitted patches for new database entries for
-your system at L<https://github.com/PDLPorters/extutils-f77>
-
-Note the default on most systems is now to search for a generic 'GNU' compiler
-which can be gfortran, g77, g95 or fort77 (in that order based on usage) and then find
-the appropriate link libraries automatically. (This is the 'Generic' 'GNU' database entry
-in the code.)
-
-The library list which the module returns
-can be explicitly overridden by setting the environment
-variable F77LIBS, e.g.
-
-  % setenv F77LIBS "-lfoo -lbar"
-  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
-  ...
-
-=cut
-
 $VERSION = "1.22";
 
 warn "\nExtUtils::F77: Version $VERSION\n";
@@ -405,16 +371,6 @@ $F77config{Darwin}{DEFAULT}     = 'GNU';
 
 ############ End of database is here ############
 
-=head1 SYNOPSIS
-
-  use ExtUtils::F77;               # Automatic guess
-  use ExtUtils::F77 qw(sunos);     # Specify system
-  use ExtUtils::F77 qw(linux g77); # Specify system and compiler
-  $fortranlibs = ExtUtils::F77->runtime;
-
-
-=cut
-
 # Package variables
 
 $Runtime = "-LSNAFU -lwontwork";
@@ -538,38 +494,6 @@ EOD
    print "$Pkg: Cflags: $Cflags\n";
 
 } # End of import ()
-
-=head1 METHODS
-
-The following are all class methods.
-
-=head2 runtime
-
-Returns a list of F77 runtime libraries.
-
-  $fortranlibs = ExtUtils::F77->runtime;
-
-=head2 runtimeok
-
-Returns TRUE only if runtime libraries have been found successfully.
-
-=head2 trail_
-
-Returns true if F77 names have trailing underscores.
-
-=head2 compiler
-
-Returns command to execute the compiler (e.g. 'f77').
-
-=head2 cflags
-
-Returns compiler flags.
-
-=head2 testcompiler
-
-Test to see if compiler actually works.
-
-=cut
 
 sub runtime { return $Runtime; }
 sub runtimeok { return $RuntimeOK; }
@@ -771,6 +695,79 @@ sub link_gnufortran_compiler {
    return( qq{"-L$dir" -L/usr/lib -l$lib -lm} );
 }
 
+1; # Return true
+
+__END__
+
+=head1 NAME
+
+ExtUtils::F77 - Simple interface to F77 libs
+
+=head1 DESCRIPTION
+
+This module tries to figure out how to link C programs with
+Fortran subroutines on your system. Basically one must add a list
+of Fortran runtime libraries. The problem is their location
+and name varies with each OS/compiler combination!
+
+This module tries to implement a simple
+'rule-of-thumb' database for various flavours of UNIX systems.
+A simple self-documenting Perl database of knowledge/code
+for figuring out how to link for various combinations of OS and
+compiler is embedded in the modules Perl code. Please help
+save the world by submitted patches for new database entries for
+your system at L<https://github.com/PDLPorters/extutils-f77>
+
+Note the default on most systems is now to search for a generic 'GNU' compiler
+which can be gfortran, g77, g95 or fort77 (in that order based on usage) and then find
+the appropriate link libraries automatically. (This is the 'Generic' 'GNU' database entry
+in the code.)
+
+The library list which the module returns
+can be explicitly overridden by setting the environment
+variable F77LIBS, e.g.
+
+  % setenv F77LIBS "-lfoo -lbar"
+  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
+  ...
+
+=head1 SYNOPSIS
+
+  use ExtUtils::F77;               # Automatic guess
+  use ExtUtils::F77 qw(sunos);     # Specify system
+  use ExtUtils::F77 qw(linux g77); # Specify system and compiler
+  $fortranlibs = ExtUtils::F77->runtime;
+
+=head1 METHODS
+
+The following are all class methods.
+
+=head2 runtime
+
+Returns a list of F77 runtime libraries.
+
+  $fortranlibs = ExtUtils::F77->runtime;
+
+=head2 runtimeok
+
+Returns TRUE only if runtime libraries have been found successfully.
+
+=head2 trail_
+
+Returns true if F77 names have trailing underscores.
+
+=head2 compiler
+
+Returns command to execute the compiler (e.g. 'f77').
+
+=head2 cflags
+
+Returns compiler flags.
+
+=head2 testcompiler
+
+Test to see if compiler actually works.
+
 =head1 SEE ALSO
 
 The L<PGPLOT> module uses this to link with the Fortran based graphics library, and was the cause of this module's development.
@@ -778,12 +775,3 @@ The L<PGPLOT> module uses this to link with the Fortran based graphics library, 
 =head1 AUTHOR
 
 Karl Glazebrook
-
-=cut
-
-
-1; # Return true
-
-
-
-
