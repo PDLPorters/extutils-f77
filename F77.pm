@@ -480,7 +480,7 @@ sub import {
       # If it doesn't work try Generic + GNU77
 
       unless (("$Runtime" ne "-LSNAFU -lwontwork") && $ok) {
-         print <<"EOD";
+         warn <<"EOD";
          $Pkg: Unable to guess and/or validate system/compiler configuration
          $Pkg: Will try system=Generic Compiler=$fallback_compiler
 EOD
@@ -492,7 +492,7 @@ EOD
          my $flibs = get ($F77config{$system}{$compiler}{Link});
          $Runtime =  $flibs ; #. gcclibs($flibs); #  Note gcclibs appears to be no longer required.
          $ok = validate_libs($Runtime) if $flibs ne "";
-         print "$Pkg: Well that didn't appear to validate. Well I will try it anyway.\n"
+         warn "$Pkg: Well that didn't appear to validate. Well I will try it anyway.\n"
          unless $Runtime && $ok;
       }
 
@@ -505,7 +505,7 @@ EOD
    if (defined( $F77config{$system}{$compiler}{Trail_} )){
       $Trail_  = get $F77config{$system}{$compiler}{Trail_};
    } else {
-      print << "EOD";
+      warn << "EOD";
       $Pkg: There does not appear to be any configuration info about
       $Pkg: names with trailing underscores for system $system. Will assume
       $Pkg: F77 names have trailing underscores.
@@ -516,7 +516,7 @@ EOD
    if (defined( $F77config{$system}{$compiler}{Compiler} )) {
       $Compiler = get $F77config{$system}{$compiler}{Compiler};
    } else {
-      print << "EOD";
+      warn << "EOD";
       $Pkg: There does not appear to be any configuration info about
       $Pkg: the F77 compiler name. Will assume 'f77'.
 EOD
@@ -527,7 +527,7 @@ EOD
    if (defined( $F77config{$system}{$compiler}{Cflags} )) {
       $Cflags = get $F77config{$system}{$compiler}{Cflags} ;
    } else {
-      print << "EOD";
+      warn << "EOD";
       $Pkg: There does not appear to be any configuration info about
       $Pkg: the options for the F77 compiler. Will assume none
       $Pkg: necessary.
@@ -664,8 +664,8 @@ sub testcompiler {
    system "$Compiler $Cflags $file.f -o ${file}_exe";
    print "Executing the test program...\n";
    if (`${file}_exe` ne " Hello World\n") {
-      print "Test of Fortran Compiler FAILED. \n";
-      print "Do not know how to compile Fortran on your system\n";
+      warn "Test of Fortran Compiler FAILED. \n";
+      warn "Do not know how to compile Fortran on your system\n";
       $ret=0;
    }
    else{
