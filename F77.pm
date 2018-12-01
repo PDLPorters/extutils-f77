@@ -630,14 +630,6 @@ sub link_gnufortran_compiler {
    my @try = @_;
    my $compiler = find_in_path( @try );
    return () unless defined $compiler;
-   my @libs = @{$COMPLIBS{$compiler}};
-   my ($dir, $lib, $test);
-   foreach $test (@libs) {
-      $dir = gfortran_find_libdir($compiler, $test);
-      $lib = $test, last if defined $dir;
-      $dir = "/usr/local/lib";
-      $lib = "f2c";
-   }
    # Get compiler version number
    my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/;
    my $version = "$1.$2";  # Major version number
@@ -648,6 +640,14 @@ sub link_gnufortran_compiler {
       && $compiler eq 'gfortran' && $version >= 4.9 ) {
       # Add extra libs for gfortran versions >= 4.9 and OS X
       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";
+   }
+   my @libs = @{$COMPLIBS{$compiler}};
+   my ($dir, $lib, $test);
+   foreach $test (@libs) {
+      $dir = gfortran_find_libdir($compiler, $test);
+      $lib = $test, last if defined $dir;
+      $dir = "/usr/local/lib";
+      $lib = "f2c";
    }
    return( qq{"-L$dir" $append -L/usr/lib -l$lib -lm} );
 }
