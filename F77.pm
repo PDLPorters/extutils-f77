@@ -541,39 +541,33 @@ EOD
 
 =head1 METHODS
 
-The following methods are provided:
+The following are all class methods.
 
-=over 4
-
-=item * B<runtime>
+=head2 runtime
 
 Returns a list of F77 runtime libraries.
 
   $fortranlibs = ExtUtils::F77->runtime;
 
-=item * B<runtimeok>
+=head2 runtimeok
 
 Returns TRUE only if runtime libraries have been found successfully.
 
-=item * B<trail_>
+=head2 trail_
 
 Returns true if F77 names have trailing underscores.
 
-=item * B<compiler>
+=head2 compiler
 
 Returns command to execute the compiler (e.g. 'f77').
 
-=item * B<cflags>
+=head2 cflags
 
 Returns compiler flags.
 
-=item * B<testcompiler>
+=head2 testcompiler
 
 Test to see if compiler actually works.
-
-=back
-
-More methods  will probably be added in the future.
 
 =cut
 
