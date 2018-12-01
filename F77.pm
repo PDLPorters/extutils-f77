@@ -64,6 +64,20 @@ else {
 # hash keys. First key is usually the name of the architecture as
 # returned by Config (modulo ucfirst()).
 
+# Format is: OS, then compiler-family, then specific keys:
+
+# Link: Code to figure out and return link-string for this architecture
+# Returns false if it can't find anything sensible.
+
+# Trail_: Whether symbols (subroutine names etc.) have trailing underscores
+# (true/false)
+
+# DEFAULT: Name of default compiler - corresponds to one of the above keys
+
+# Compiler: Program to run to actually compile stuff
+
+# Cflags: Associated compiler flags
+
 $F77config{MinGW}{G77}{Link} = sub {
    my @libs = ('g2c', 'f2c');
    my ($dir, $lib, $test);
@@ -112,31 +126,15 @@ $F77config{MinGW}{GFortran}{Cflags}   = '-O';
 
 ### SunOS (use this as a template for new entries) ###
 
-# Code to figure out and return link-string for this architecture
-# Returns false if it can't find anything sensible.
-
 $F77config{Sunos}{F77}{Link} = sub {
    my $dir = find_highest_SC("/usr/lang/SC*");
    return "" unless $dir; # Failure
    print "$Pkg: Found Fortran latest version lib dir $dir\n";
    return qq{"-L$dir" -lF77 -lm};
 };
-
-# Whether symbols (subroutine names etc.) have trailing underscores
-# (true/false)
-
 $F77config{Sunos}{F77}{Trail_} = 1;
-
-# Name of default compiler - corresponds to one of the above keys
-
 $F77config{Sunos}{DEFAULT} = 'F77';
-
-# Program to run to actually compile stuff
-
 $F77config{Sunos}{F77}{Compiler} = 'f77';
-
-# Associated compiler flags
-
 $F77config{Sunos}{F77}{Cflags} = '-O';
 
 ############ Rest of database is here ############
