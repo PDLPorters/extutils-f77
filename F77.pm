@@ -1,4 +1,3 @@
-
 package ExtUtils::F77;
 
 use Config;
@@ -16,21 +15,21 @@ Fortran subroutines on your system. Basically one must add a list
 of Fortran runtime libraries. The problem is their location
 and name varies with each OS/compiler combination!
 
-This module tries to implement a simple  
+This module tries to implement a simple
 'rule-of-thumb' database for various flavours of UNIX systems.
 A simple self-documenting Perl database of knowledge/code
 for figuring out how to link for various combinations of OS and
-compiler is embedded in the modules Perl code. Please help 
+compiler is embedded in the modules Perl code. Please help
 save the world by submitted patches for new database entries for
 your system at L<https://github.com/PDLPorters/extutils-f77>
 
 Note the default on most systems is now to search for a generic 'GNU' compiler
-which can be gfortran, g77, g95 or fort77 (in that order based on usage) and then find 
+which can be gfortran, g77, g95 or fort77 (in that order based on usage) and then find
 the appropriate link libraries automatically. (This is the 'Generic' 'GNU' database entry
 in the code.)
 
-The library list which the module returns 
-can be explicitly overridden by setting the environment 
+The library list which the module returns
+can be explicitly overridden by setting the environment
 variable F77LIBS, e.g.
 
   % setenv F77LIBS "-lfoo -lbar"
@@ -39,7 +38,7 @@ variable F77LIBS, e.g.
 
 =cut
 
-$VERSION = "1.22"; 
+$VERSION = "1.22";
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
@@ -69,7 +68,7 @@ if ($^O =~ /MSWin/i) {
    elsif ($Config{gccversion}) {
       # Different fortran compiler for gcc-4.x.x (and later) versus gcc-3.x.x
       $gcc = 'gcc';
-      @version = split /\./, $Config{gccversion}; 
+      @version = split /\./, $Config{gccversion};
       $fallback_compiler = $version[0] >= 4 ? 'GFortran' : 'G77';
       $gfortran = 'gfortran';
    }
@@ -99,7 +98,7 @@ $F77config{MinGW}{G77}{Link} = sub {
       # directory if it returns a proper path (or matches a /)
       if (defined $dir && $dir ne "lib$test.a") {
          $lib = $test; # Found an existing library
-         last; 
+         last;
       }
    }
 
@@ -108,7 +107,7 @@ $F77config{MinGW}{G77}{Link} = sub {
    } else {
       $dir = "/usr/local/lib";
       $lib = "f2c";
-   }  
+   }
    return( qq{"-L$dir" -L/usr/lib -l$lib -lm} );
 };
 
@@ -123,7 +122,7 @@ $F77config{MinGW}{GFortran}{Link} = sub {
       $dir =~ s,/libgfortran.a$,,;
    } else {
       $dir = "/usr/local/lib";
-   }    
+   }
    return( qq{"-L$dir" -L/usr/lib -lgfortran -lquadmath -lm} );
 };
 
@@ -139,21 +138,21 @@ $F77config{MinGW}{GFortran}{Cflags}   = '-O';
 # Code to figure out and return link-string for this architecture
 # Returns false if it can't find anything sensible.
 
-$F77config{Sunos}{F77}{Link} = sub {  
+$F77config{Sunos}{F77}{Link} = sub {
    $dir = find_highest_SC("/usr/lang/SC*");
    return "" unless $dir; # Failure
    print "$Pkg: Found Fortran latest version lib dir $dir\n";
    return qq{"-L$dir" -lF77 -lm};
 };
 
-# Whether symbols (subroutine names etc.) have trailing underscores 
+# Whether symbols (subroutine names etc.) have trailing underscores
 # (true/false)
 
-$F77config{Sunos}{F77}{Trail_} = 1; 
+$F77config{Sunos}{F77}{Trail_} = 1;
 
 # Name of default compiler - corresponds to one of the above keys
 
-$F77config{Sunos}{DEFAULT} = 'F77'; 
+$F77config{Sunos}{DEFAULT} = 'F77';
 
 # Program to run to actually compile stuff
 
@@ -163,7 +162,7 @@ $F77config{Sunos}{F77}{Compiler} = 'f77';
 
 $F77config{Sunos}{F77}{Cflags} = '-O';
 
-############ Rest of database is here ############ 
+############ Rest of database is here ############
 
 ### Solaris ###
 
@@ -230,7 +229,7 @@ $F77config{Solaris}{F77}{Link} = sub {
       -lfmaxlai
       -lfminvai
       -lfmaxvai
-      -lfsu 
+      -lfsu
       -lsunmath
       -lm
       /;
@@ -258,7 +257,7 @@ $F77config{Solaris}{DEFAULT} = 'F77';
 
 $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
-$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');    
+$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');
 $F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
@@ -266,7 +265,7 @@ $F77config{Generic}{DEFAULT}     = 'GNU';
 
 $F77config{Cygwin}{GNU}{Trail_} = 1;
 $F77config{Cygwin}{GNU}{Cflags} = '-O';        # <---need this space!
-$F77config{Cygwin}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');    
+$F77config{Cygwin}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');
 $F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
 $F77config{Cygwin}{DEFAULT}     = 'GNU';
 
@@ -299,7 +298,7 @@ $F77config{Hpux}{DEFAULT}     = 'F77';
 # longer an experimental feature and I am using it exclusively without any
 # problem. The code below is what I use instead of original IRIX section
 # in the ExtUtils::F77 package. It adds the -64 flag and it is supposed to
-# provide the same functionality as the old code for a non -64 abi. 
+# provide the same functionality as the old code for a non -64 abi.
 
 if (ucfirst($Config{'osname'}) eq "Irix")
 {
@@ -361,7 +360,7 @@ $F77config{Freebsd}{G77}{Link} = sub {
         $dir =~ s,/libg2c.a$,,;
     } else {
         $dir = "/usr/local/lib";
-    }    
+    }
     return( qq{"-L$dir" -L/usr/lib -lg2c -lm} );
 };
 
@@ -376,7 +375,7 @@ $F77config{Freebsd}{GFortran}{Link} = sub {
         $dir =~ s,/libgfortran.a$,,;
     } else {
         $dir = "/usr/local/lib";
-    }    
+    }
     return( qq{"-L$dir" -L/usr/lib -lgfortran -lm} );
 };
 
@@ -402,11 +401,11 @@ $F77config{Darwin}{GNU} = $F77config{Generic}{GNU};
 $F77config{Darwin}{DEFAULT}     = 'GNU';
 
 
-############ End of database is here ############ 
+############ End of database is here ############
 
 =head1 SYNOPSIS
 
-  use ExtUtils::F77;               # Automatic guess 
+  use ExtUtils::F77;               # Automatic guess
   use ExtUtils::F77 qw(sunos);     # Specify system
   use ExtUtils::F77 qw(linux g77); # Specify system and compiler
   $fortranlibs = ExtUtils::F77->runtime;
@@ -468,11 +467,11 @@ sub import {
             if ($compiler eq 'GNU') { # Special gfortran case since it seems to have lots of random libs
                print "Found compiler=$compiler - skipping validation of $Runtime \n";
 
-            }else {  
+            } else {
                $ok = validate_libs($Runtime) if $flibs ne "" ;
             }
          }
-      }else {
+      } else {
          $Runtime = $ok = "";
       }
 
@@ -497,14 +496,13 @@ EOD
 
       $RuntimeOK = $ok;
 
-   } # Not overriding   
+   } # Not overriding
 
    # Now get the misc info for the methods.
 
    if (defined( $F77config{$system}{$compiler}{Trail_} )){
-      $Trail_  = get $F77config{$system}{$compiler}{Trail_};  
-   }
-   else{ 
+      $Trail_  = get $F77config{$system}{$compiler}{Trail_};
+   } else {
       print << "EOD";
       $Pkg: There does not appear to be any configuration info about
       $Pkg: names with trailing underscores for system $system. Will assume
@@ -626,14 +624,14 @@ sub validate_libs {
 
    # Create list of directories to search (with common defaults)
 
-   my @path = ();     
-   for (@args, "/usr/lib", "/lib") { 
+   my @path = ();
+   for (@args, "/usr/lib", "/lib") {
       push @path, $1 if /^-L(.+)$/ && -d $1;
    }
 
    # Search directories
 
-   for (@args) {      
+   for (@args) {
       next if /^-L/;
       next if $_ eq "-lm"; # Ignore this common guy
       if (/^-l(.+)$/) {
@@ -678,7 +676,7 @@ sub testcompiler {
 
 # gcclibs() routine
 #    Return gcc link libs (e.g. -L/usr/local/lib/gcc-lib/sparc-sun-sunos4.1.3_U1/2.7.0 -lgcc)
-#    Note this routine appears to be no longer required - gcc3 or 4 change? - and is 
+#    Note this routine appears to be no longer required - gcc3 or 4 change? - and is
 #    NO LONGER CALLED from anywhere in the code. Use of this routine in the future
 #    is DEPRECATED. Retain here just in case this logic is ever needed again,
 #    - Karl Glazebrook Dec/2010
@@ -700,13 +698,13 @@ sub gcclibs {
    }
    if ($isgcc or ($flibs =~ /-lg2c/) or ($flibs =~ /-lf2c/) ) {
       # Don't link to libgcc on MS Windows iff we're using gfortran.
-      unless($fallback_compiler eq 'GFortran' && $^O =~ /MSWin/i) {
+      unless ($fallback_compiler eq 'GFortran' && $^O =~ /MSWin/i) {
          $gccdir = `$gcc -m32 -print-libgcc-file-name`; chomp $gccdir;
          $gccdir =~ s/\/libgcc.a//;
          return qq{ "-L$gccdir" -lgcc};
-      }else{
+      } else {
          return "";
-      } 
+      }
 
    }else{
       return "";
@@ -782,7 +780,7 @@ sub link_gnufortran_compiler {
       }
    }
    # Get compiler version number
-   my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/; 
+   my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/;
    my $version = "$1.$2";  # Major version number
    print "ExtUtils::F77: $compiler version $version.$3\n";
    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
