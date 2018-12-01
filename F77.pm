@@ -3,6 +3,8 @@ package ExtUtils::F77;
 use Config;
 use File::Spec;
 use Text::ParseWords;
+use File::Which qw(which);
+use List::Util qw(first);
 
 =head1 NAME
 
@@ -712,29 +714,11 @@ sub gcclibs {
 }
 
 # Try and find a program in the users PATH
-
 sub find_in_path {
-   my @names = @_;
-   my @path;
-   if ($^O =~ /mswin32/i) {
-      for(@names) { $_ .= '.exe'}
-      @path = split(";", $ENV{PATH});
-   }
-   else {@path = split(":",$ENV{PATH})}
-   my ($name,$dir);
-   for $name (@names) {
-      return $name if exists $CACHE{$name};
-      for $dir (@path) {
-         if (-x $dir."/$name") {
-            print "Found compiler $name\n";
-            $CACHE{$name}++;
-            return $name;
-         }
-      }
-   }
-   return '' if $^O eq 'VMS';
-   return undef;
-#   die "Unable to find a fortran compiler using names: ".join(" ",@names);
+  my $found = first { which $_ } @_;
+  return ($^O eq 'VMS' ? '' : undef) if !$found;
+  print "Found compiler $found\n";
+  return $found;
 }
 
 # Based on code from Tim Jeness, tries to figure out the correct GNU

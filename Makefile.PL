@@ -7,6 +7,8 @@ WriteMakefile(
   VERSION_FROM  => 'F77.pm',
   PREREQ_PM => {
     'Text::ParseWords' => 0,
+    'File::Which' => 0,
+    'List::Util' => 0,
   },
   META_MERGE => {
     "meta-spec" => { version => 2 },
