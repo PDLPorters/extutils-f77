@@ -87,6 +87,14 @@ else {
 
 # Cflags: Associated compiler flags
 
+sub gfortran_make_linkline {
+  my ($dir, $lib, $defaultdir, $defaultlib, $append) = @_;
+  $dir ||= $defaultdir;
+  $lib ||= $defaultlib;
+  $append ||= '';
+  return( qq{"-L$dir" $append -L/usr/lib -l$lib -lm} );
+}
+
 sub gfortran_find_libdir {
   my ($compiler, $lib) = @_;
   for my $suffix (qw(a so)) {
@@ -107,10 +115,8 @@ $F77config{MinGW}{G77}{Link} = sub {
    foreach $test (@libs) {
       $dir = gfortran_find_libdir('g77', $test);
       $lib = $test, last if defined $dir;
-      $dir = "/usr/local/lib";
-      $lib = "f2c";
    }
-   return( qq{"-L$dir" -L/usr/lib -l$lib -lm} );
+   gfortran_make_linkline($dir, $lib, "/usr/local/lib", "f2c");
 };
 $F77config{MinGW}{G77}{Trail_} = 1;
 $F77config{MinGW}{G77}{Compiler} = find_in_path('g77','f77','fort77');
@@ -118,8 +124,7 @@ $F77config{MinGW}{G77}{Cflags} = '-O';
 
 $F77config{MinGW}{GFortran}{Link} = sub {
   my $dir = gfortran_find_libdir($gfortran, 'gfortran');
-  $dir = "/usr/local/lib" if !defined $dir;
-  return( qq{"-L$dir" -L/usr/lib -lgfortran -lquadmath -lm} );
+  gfortran_make_linkline($dir, "gfortran", "/usr/local/lib", "", '-lquadmath');
 };
 $F77config{MinGW}{GFortran}{Trail_} = 1;
 $F77config{MinGW}{GFortran}{Compiler} = "$gfortran";
@@ -330,8 +335,7 @@ if($^O =~ /Freebsd/i) {
 
 $F77config{Freebsd}{G77}{Link} = sub {
   my $dir = gfortran_find_libdir('g77-34', 'g2c');
-  $dir = "/usr/local/lib" if !defined $dir;
-  return( qq{"-L$dir" -L/usr/lib -lg2c -lm} );
+  gfortran_make_linkline($dir, 'g2c', "/usr/local/lib", '');
 };
 $F77config{Freebsd}{G77}{Trail_} = 1;
 $F77config{Freebsd}{G77}{Compiler} = 'g77-34';
@@ -339,8 +343,7 @@ $F77config{Freebsd}{G77}{Cflags} = '-O2';
 
 $F77config{Freebsd}{GFortran}{Link} = sub {
   my $dir = gfortran_find_libdir($gfortran, 'gfortran');
-  $dir = "/usr/local/lib" if !defined $dir;
-  return( qq{"-L$dir" -L/usr/lib -lgfortran -lm} );
+  gfortran_make_linkline($dir, "gfortran", "/usr/local/lib", "");
 };
 $F77config{Freebsd}{GFortran}{Trail_} = 1;
 $F77config{Freebsd}{GFortran}{Compiler} = "$gfortran";
@@ -646,10 +649,8 @@ sub link_gnufortran_compiler {
    foreach $test (@libs) {
       $dir = gfortran_find_libdir($compiler, $test);
       $lib = $test, last if defined $dir;
-      $dir = "/usr/local/lib";
-      $lib = "f2c";
    }
-   return( qq{"-L$dir" $append -L/usr/lib -l$lib -lm} );
+   gfortran_make_linkline($dir, $lib, "/usr/local/lib", "f2c", $append);
 }
 
 1; # Return true
