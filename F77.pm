@@ -12,15 +12,6 @@ our $VERSION = "1.22";
 
 warn "\nExtUtils::F77: Version $VERSION\n";
 
-# Database starts here. Basically we have a large hash specifying
-# entries for each os/compiler combination. Entries can be code refs
-# in which case they are executed and the returned value used. This
-# allows us to be quite smart.
-
-# Hash key convention is uppercase first letter of
-# hash keys. First key is usually the name of the architecture as
-# returned by Config (modulo ucfirst()).
-
 print "Loaded ExtUtils::F77 version $VERSION\n";
 
 my %F77config=();
@@ -63,6 +54,15 @@ else {
 }
 
 ############## End of Win32 Specific ##############
+
+# Database starts here. Basically we have a large hash specifying
+# entries for each os/compiler combination. Entries can be code refs
+# in which case they are executed and the returned value used. This
+# allows us to be quite smart.
+
+# Hash key convention is uppercase first letter of
+# hash keys. First key is usually the name of the architecture as
+# returned by Config (modulo ucfirst()).
 
 $F77config{MinGW}{G77}{Link} = sub {
    my @libs = ('g2c', 'f2c');
