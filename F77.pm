@@ -23,6 +23,15 @@ my $Compiler = "";
 my $Cflags = "";
 my ($gcc, $gfortran, $fallback_compiler);
 
+# all the compilers and their libraries
+my %COMPLIBS = (
+  g77 => [qw/ g2c f2c /],
+  f77 => [qw/ g2c f2c /],
+  fort77 => [qw/ g2c f2c /],
+  gfortran => [qw/ gfortran /],
+  g95 => [qw/ f95 /],
+);
+
 ########## Win32 Specific ##############
 
 if ($^O =~ /MSWin/i) {
@@ -621,15 +630,7 @@ sub link_gnufortran_compiler {
    my @try = @_;
    my $compiler = find_in_path( @try );
    return () unless defined $compiler;
-   # all the compilers and their libraries
-   my %complibs = (
-      g77 => [qw/ g2c f2c /],
-      f77 => [qw/ g2c f2c /],
-      fort77 => [qw/ g2c f2c /],
-      gfortran => [qw/ gfortran /],
-      g95 => [qw/ f95 /],
-   );
-   my @libs = @{$complibs{$compiler}};
+   my @libs = @{$COMPLIBS{$compiler}};
    my ($dir, $lib, $test);
    foreach $test (@libs) {
       $dir = gfortran_find_libdir($compiler, $test);
