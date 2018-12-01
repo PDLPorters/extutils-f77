@@ -620,6 +620,7 @@ sub link_gnufortran_compiler {
    return () if $^O =~ /MSWin32/i; # Unneeded for MinGW, emits warnings if allowed to proceed.
    my @try = @_;
    my $compiler = find_in_path( @try );
+   return () unless defined $compiler;
    # all the compilers and their libraries
    my %complibs = (
       g77 => [qw/ g2c f2c /],
@@ -628,7 +629,6 @@ sub link_gnufortran_compiler {
       gfortran => [qw/ gfortran /],
       g95 => [qw/ f95 /],
    );
-   return () unless defined $compiler;
    my @libs = @{$complibs{$compiler}};
    my ($dir, $lib, $test);
    foreach $test (@libs) {
