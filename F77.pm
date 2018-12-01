@@ -66,13 +66,13 @@ else {
 
 # Format is: OS, then compiler-family, then specific keys:
 
+# DEFAULT: as a compiler-family, gives name of default compiler-family - corresponds to one of the keys
+
 # Link: Code to figure out and return link-string for this architecture
 # Returns false if it can't find anything sensible.
 
 # Trail_: Whether symbols (subroutine names etc.) have trailing underscores
 # (true/false)
-
-# DEFAULT: Name of default compiler - corresponds to one of the above keys
 
 # Compiler: Program to run to actually compile stuff
 
@@ -92,7 +92,6 @@ $F77config{MinGW}{G77}{Link} = sub {
          last;
       }
    }
-
    if ( defined $dir  && defined $lib) {
       $dir =~ s,/lib$lib.a$,,;
    } else {
@@ -101,6 +100,9 @@ $F77config{MinGW}{G77}{Link} = sub {
    }
    return( qq{"-L$dir" -L/usr/lib -l$lib -lm} );
 };
+$F77config{MinGW}{G77}{Trail_} = 1;
+$F77config{MinGW}{G77}{Compiler} = find_in_path('g77','f77','fort77');
+$F77config{MinGW}{G77}{Cflags} = '-O';
 
 $F77config{MinGW}{GFortran}{Link} = sub {
    my $dir = `$gfortran -print-file-name=libgfortran.a`;
@@ -108,7 +110,6 @@ $F77config{MinGW}{GFortran}{Link} = sub {
    # Note that -print-file-name returns just the library name
    # if it cant be found - make sure that we only accept the
    # directory if it returns a proper path (or matches a /)
-
    if ( defined $dir ) {
       $dir =~ s,/libgfortran.a$,,;
    } else {
@@ -116,12 +117,8 @@ $F77config{MinGW}{GFortran}{Link} = sub {
    }
    return( qq{"-L$dir" -L/usr/lib -lgfortran -lquadmath -lm} );
 };
-
-$F77config{MinGW}{G77}{Trail_} = 1;
 $F77config{MinGW}{GFortran}{Trail_} = 1;
-$F77config{MinGW}{G77}{Compiler} = find_in_path('g77','f77','fort77');
 $F77config{MinGW}{GFortran}{Compiler} = "$gfortran";
-$F77config{MinGW}{G77}{Cflags} = '-O';
 $F77config{MinGW}{GFortran}{Cflags}   = '-O';
 
 ### SunOS (use this as a template for new entries) ###
@@ -133,9 +130,10 @@ $F77config{Sunos}{F77}{Link} = sub {
    return qq{"-L$dir" -lF77 -lm};
 };
 $F77config{Sunos}{F77}{Trail_} = 1;
-$F77config{Sunos}{DEFAULT} = 'F77';
 $F77config{Sunos}{F77}{Compiler} = 'f77';
 $F77config{Sunos}{F77}{Cflags} = '-O';
+
+$F77config{Sunos}{DEFAULT} = 'F77';
 
 ############ Rest of database is here ############
 
@@ -162,9 +160,7 @@ $F77config{Solaris}{F77}{Link} = sub {
       }
    }
 
-
    if (defined $NSPATH) {
-
       print "$Pkg: Found F77 path:--->$NSPATH\n";
 
       $dir = find_highest_SC("$NSPATH/WS*/lib") ||
@@ -178,8 +174,6 @@ $F77config{Solaris}{F77}{Link} = sub {
          print "$Pkg: Trying $NSPATH/lib\n";
          $dir = "$NSPATH/lib" if glob("$NSPATH/lib/libF77*");
       }
-
-   } else {
    }
    return "" unless $dir; # Failure
    print "$Pkg: Found Fortran latest version lib dir $dir\n";
@@ -221,11 +215,10 @@ $F77config{Solaris}{F77}{Link} = sub {
 
    join( ' ', qq{"-L$dir"}, @libs );
 };
-
-
 $F77config{Solaris}{F77}{Trail_} = 1;
 $F77config{Solaris}{F77}{Compiler} = 'f77';
 $F77config{Solaris}{F77}{Cflags} = '-O';
+
 $F77config{Solaris}{DEFAULT} = 'F77';
 
 ### Generic GNU-77 or F2C system ###
@@ -234,6 +227,7 @@ $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
 $F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');
 $F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
+
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
 ### cygwin ###
@@ -242,11 +236,13 @@ $F77config{Cygwin}{GNU}{Trail_} = 1;
 $F77config{Cygwin}{GNU}{Cflags} = '-O';        # <---need this space!
 $F77config{Cygwin}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');
 $F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
+
 $F77config{Cygwin}{DEFAULT}     = 'GNU';
 
 ### Linux ###
 
 $F77config{Linux}{GNU}     = $F77config{Generic}{GNU};
+
 $F77config{Linux}{DEFAULT} = 'GNU';
 
 ### DEC OSF/1 ###
@@ -255,6 +251,7 @@ $F77config{Dec_osf}{F77}{Link}   = "-L/usr/lib -lUfor -lfor -lFutil -lm -lots -l
 $F77config{Dec_osf}{F77}{Trail_} = 1;
 $F77config{Dec_osf}{F77}{Compiler} = 'f77';
 $F77config{Dec_osf}{F77}{Cflags} = '-O';
+
 $F77config{Dec_osf}{DEFAULT}     = 'F77';
 
 ### HP/UX ###
@@ -263,6 +260,7 @@ $F77config{Hpux}{F77}{Link}   = "-L/usr/lib -lcl -lm";
 $F77config{Hpux}{F77}{Trail_} = 0;
 $F77config{Hpux}{F77}{Compiler} = 'f77';
 $F77config{Hpux}{F77}{Cflags} = '-O';
+
 $F77config{Hpux}{DEFAULT}     = 'F77';
 
 ### IRIX ###
@@ -308,6 +306,7 @@ if (ucfirst($Config{'osname'}) eq "Irix")
    $F77config{Irix}{F77}{Link}     = "$libs";
    $F77config{Irix}{F77}{Trail_}   = 1;
    $F77config{Irix}{F77}{Compiler} = "f77 $abi";
+
    $F77config{Irix}{DEFAULT}       = 'F77';
 }
 
@@ -315,6 +314,7 @@ if (ucfirst($Config{'osname'}) eq "Irix")
 
 $F77config{Aix}{F77}{Link}   = "-L/usr/lib -lxlf90 -lxlf -lc -lm";
 $F77config{Aix}{F77}{Trail_} = 0;
+
 $F77config{Aix}{DEFAULT}     = 'F77';
 
 ### FreeBSD ###
@@ -330,7 +330,6 @@ $F77config{Freebsd}{G77}{Link} = sub {
     # Note that -print-file-name returns just the library name
     # if it cant be found - make sure that we only accept the
     # directory if it returns a proper path (or matches a /)
-
     if( defined $dir ) {
         $dir =~ s,/libg2c.a$,,;
     } else {
@@ -338,6 +337,9 @@ $F77config{Freebsd}{G77}{Link} = sub {
     }
     return( qq{"-L$dir" -L/usr/lib -lg2c -lm} );
 };
+$F77config{Freebsd}{G77}{Trail_} = 1;
+$F77config{Freebsd}{G77}{Compiler} = 'g77-34';
+$F77config{Freebsd}{G77}{Cflags} = '-O2';
 
 $F77config{Freebsd}{GFortran}{Link} = sub {
     my $dir = `$gfortran -print-file-name=libgfortran.a`;
@@ -345,7 +347,6 @@ $F77config{Freebsd}{GFortran}{Link} = sub {
     # Note that -print-file-name returns just the library name
     # if it cant be found - make sure that we only accept the
     # directory if it returns a proper path (or matches a /)
-
     if( defined $dir ) {
         $dir =~ s,/libgfortran.a$,,;
     } else {
@@ -353,28 +354,24 @@ $F77config{Freebsd}{GFortran}{Link} = sub {
     }
     return( qq{"-L$dir" -L/usr/lib -lgfortran -lm} );
 };
-
-$F77config{Freebsd}{G77}{Trail_} = 1;
 $F77config{Freebsd}{GFortran}{Trail_} = 1;
-$F77config{Freebsd}{G77}{Compiler} = 'g77-34';
 $F77config{Freebsd}{GFortran}{Compiler} = "$gfortran";
-$F77config{Freebsd}{G77}{Cflags} = '-O2';
 $F77config{Freebsd}{GFortran}{Cflags}   = '-O2';
-$F77config{Freebsd}{DEFAULT}     = 'GFortran';
 
+$F77config{Freebsd}{DEFAULT}     = 'GFortran';
 
 ### VMS ###
 
-$F77config{VMS}{Fortran}{Trail_} = 0;
 $F77config{VMS}{Fortran}{Link}   = ' ';         # <---need this space!
-$F77config{VMS}{DEFAULT}     = 'Fortran';
+$F77config{VMS}{Fortran}{Trail_} = 0;
 $F77config{VMS}{Fortran}{Compiler} = 'Fortran';
+
+$F77config{VMS}{DEFAULT}     = 'Fortran';
 
 ### Darwin (Mac OS X) ###
 
 $F77config{Darwin}{GNU} = $F77config{Generic}{GNU};
 $F77config{Darwin}{DEFAULT}     = 'GNU';
-
 
 ############ End of database is here ############
 
