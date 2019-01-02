@@ -99,13 +99,14 @@ sub gfortran_make_linkline {
 sub gfortran_find_libdir {
   my ($compiler, $lib) = @_;
   for my $suffix (qw(a so)) {
-    my $dir = `$compiler -print-file-name=lib$lib.$suffix`;
+    my $filename = "lib$lib.$suffix";
+    my $dir = `$compiler -print-file-name=$filename`;
     chomp $dir;
     # Note that -print-file-name returns just the library name
     # if it cant be found - make sure that we only accept the
     # directory if it returns a proper path (or matches a /)
     next if !defined $dir or $dir eq $lib;
-    $dir =~ s,/$lib$,,;
+    $dir =~ s,/$filename$,,;
     return $dir;
   }
 }
