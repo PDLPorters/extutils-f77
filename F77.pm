@@ -424,15 +424,15 @@ sub import {
       # If it doesn't work try Generic + GNU77
 
       unless (("$Runtime" ne "-LSNAFU -lwontwork") && $ok) {
-         warn <<"EOD";
-         $Pkg: Unable to guess and/or validate system/compiler configuration
-         $Pkg: Will try system=Generic Compiler=$fallback_compiler
-EOD
          $system   =
          $Config{cc} =~ /\bgcc/ && $^O =~ /MSWin32/i ? "MinGW"
                                  : $^O =~ /Freebsd/i ? "Freebsd"
          :"Generic";
          $compiler = $fallback_compiler;
+         warn <<"EOD";
+$Pkg: Unable to guess and/or validate system/compiler configuration
+$Pkg: Will try system=$system Compiler=$compiler
+EOD
          my $flibs = get ($F77config{$system}{$compiler}{Link});
          $Runtime =  $flibs ; #. gcclibs($flibs); #  Note gcclibs appears to be no longer required.
          $ok = validate_libs($Runtime) if $flibs ne "";
