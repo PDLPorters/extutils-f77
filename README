@@ -37,6 +37,6 @@ See COPYING file.
 
 6. See also
 
-https://github.com/PDLPorters/extutils-f77
-https://metacpan.org/pod/ExtUtils::F77
-http://pdl.perl.org/
+This module is also used by L<PGPLOT> (for which it was originally developed), L<PDL> (PDL::Minuit and PDL::Slatec), the 
+interfaces implemented, respectively, to the Minuit minimization library from CERN, and to parts of the Slatec library, the 
+latter also serving the purpose of showing how to interface PDL to an external library.
