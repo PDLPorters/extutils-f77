@@ -739,8 +739,10 @@ working normally.
 
 =head1 SEE ALSO
 
-The L<PGPLOT> module uses this to link with the Fortran based graphics library, and was the cause of this module's development.
+This module is also used by L<PGPLOT> (for which it was originally developed), L<PDL> (PDL::Minuit and PDL::Slatec), the 
+interfaces implemented, respectively, to the Minuit minimization library from CERN, and to parts of the Slatec library, the 
+latter also serving the purpose of showing how to interface PDL to an external library.
 
 =head1 AUTHOR
 
-Karl Glazebrook
+Karl Glazebrook, with many other contributions (see git repository at https://github.com/PDLPorters/extutils-f77)
