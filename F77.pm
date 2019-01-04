@@ -739,9 +739,7 @@ working normally.
 
 =head1 SEE ALSO
 
-This module is also used by L<PGPLOT> (for which it was originally developed), L<PDL> (PDL::Minuit and PDL::Slatec), the 
-interfaces implemented, respectively, to the Minuit minimization library from CERN, and to parts of the Slatec library, the 
-latter also serving the purpose of showing how to interface PDL to an external library.
+L<PDL> (PDL::Minuit and PDL::Slatec), L<PGPLOT>
 
 =head1 AUTHOR
 
