@@ -668,7 +668,10 @@ ExtUtils::F77 - Simple interface to F77 libs
 This module tries to figure out how to link C programs with
 Fortran subroutines on your system. Basically one must add a list
 of Fortran runtime libraries. The problem is their location
-and name varies with each OS/compiler combination!
+and name varies with each OS/compiler combination! It was originally
+developed to make building and installation of the L<PGPLOT> module easier,
+which links to the pgplot Fortran graphics library. It is now used by a numnber
+of perl modules.
 
 This module tries to implement a simple
 'rule-of-thumb' database for various flavours of UNIX systems.
