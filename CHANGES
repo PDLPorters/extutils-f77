@@ -4,7 +4,7 @@ ExtUtils::F77 Changes list
 v1.23 unreleased
 ----------------
 * Use File::Which and List::Util instead of bespoke code (mohawk2)
-* Improvements to docs (karlglazebrook,mohawk2,forskning)
+* Improvements to docs (karlglazebrook,mohawk2)
 * improvements to tests and warnings (mohawk2)
 * tidy up of code (mohawk2)
 * simplify out of gfortran handling (mohawk2)
