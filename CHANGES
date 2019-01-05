@@ -1,8 +1,9 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
-v1.23 unreleased
-----------------
+v1.23 released Jan 5th 2019
+---------------------------
+
 * Use File::Which and List::Util instead of bespoke code (mohawk2)
 * Improvements to docs (karlglazebrook,mohawk2)
 * improvements to tests and warnings (mohawk2)
