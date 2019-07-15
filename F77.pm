@@ -93,7 +93,7 @@ sub gfortran_make_linkline {
   $dir ||= $defaultdir;
   $lib ||= $defaultlib;
   $append ||= '';
-  return( qq{"-L$dir" $append -L/usr/lib -l$lib -lm} );
+  return( qq{"-L$dir" -L/usr/lib -l$lib $append -lm} );
 }
 
 sub gfortran_find_libdir {
