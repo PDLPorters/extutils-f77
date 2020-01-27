@@ -8,7 +8,7 @@ use Text::ParseWords;
 use File::Which qw(which);
 use List::Util qw(first);
 
-our $VERSION = "1.24";
+our $VERSION = "1.25";
 our $DEBUG;
 
 sub debug { return if !$DEBUG; warn @_ }
@@ -641,7 +641,8 @@ sub link_gnufortran_compiler {
    debug "ExtUtils::F77: $compiler version $version.$3\n";
    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
    my $append = "";
-   if ( $Config{osname} =~ /darwin/ && $Config{osvers} >= 14
+   my $osvers = (split(/\./,$Config{osvers}))[0]; # Extract first digit in X.Y.Z version numbers
+   if ( $Config{osname} =~ /darwin/ && $osvers >= 14
       && $compiler eq 'gfortran' && $version >= 4.9 ) {
       # Add extra libs for gfortran versions >= 4.9 and OS X
       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";

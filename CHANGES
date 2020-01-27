@@ -1,6 +1,11 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+v1.25 released Jan 27th 2020
+---------------------------
+
+* Fix of version number comparison in F77.pm link_gnufortran_compiler routine
+
 v1.24 released Jul 21st 2019
 ---------------------------
 
