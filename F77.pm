@@ -636,7 +636,7 @@ sub link_gnufortran_compiler {
    my $compiler = find_in_path( @try );
    return () unless defined $compiler;
    # Get compiler version number
-   my @t =`$compiler --version`; $t[0] =~ /(\d+).(\d)+.(\d+)/;
+   my @t =`$compiler --version`; $t[0] =~ /(\d+)\.(\d+)\.(\d+)/;
    my $version = "$1.$2";  # Major version number
    debug "ExtUtils::F77: $compiler version $version.$3\n";
    # Sigh special case random extra gfortran libs to avoid PERL_DL_NONLAZY meltdowns. KG 25/10/2015
@@ -671,7 +671,7 @@ Fortran subroutines on your system. Basically one must add a list
 of Fortran runtime libraries. The problem is their location
 and name varies with each OS/compiler combination! It was originally
 developed to make building and installation of the L<PGPLOT> module easier,
-which links to the pgplot Fortran graphics library. It is now used by a numnber
+which links to the pgplot Fortran graphics library. It is now used by a number
 of perl modules.
 
 This module tries to implement a simple
