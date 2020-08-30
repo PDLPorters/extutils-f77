@@ -63,6 +63,10 @@ else {
    $fallback_compiler = 'G77';
 }
 
+$gcc = $ENV{CC} if $ENV{CC};
+$gfortran = $ENV{F77} if $ENV{F77};
+$fallback_compiler = $ENV{F77} if $ENV{F77};
+
 ############## End of Win32 Specific ##############
 
 # Database starts here. Basically we have a large hash specifying
@@ -236,7 +240,7 @@ $F77config{Solaris}{DEFAULT} = 'F77';
 
 $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
-$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler('gfortran', 'g77', 'g95', 'fort77');
+$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler("$gfortran", 'g77', 'g95', 'fort77');
 $F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
 
 $F77config{Generic}{DEFAULT}     = 'GNU';
@@ -568,6 +572,7 @@ sub testcompiler {
    print OUT "      end\n";
    close(OUT);
    debug "Compiling the test Fortran program...\n";
+   debug "Command: $Compiler $Cflags $file.f -o ${file}_exe";
    system "$Compiler $Cflags $file.f -o ${file}_exe";
    debug "Executing the test program...\n";
    if (`${file}_exe` ne " Hello World\n") {
@@ -635,6 +640,10 @@ sub link_gnufortran_compiler {
    my @try = @_;
    my $compiler = find_in_path( @try );
    return () unless defined $compiler;
+   # Get compiler "family"
+   $compiler=~/(g77|f77|fort77|gfortran|g95)/;
+   my $comp_fam = $1;
+   debug "ExtUtils::F77: compiler family is $comp_fam\n";
    # Get compiler version number
    my @t =`$compiler --version`; $t[0] =~ /(\d+)\.(\d+)\.(\d+)/;
    my $version = "$1.$2";  # Major version number
@@ -643,11 +652,11 @@ sub link_gnufortran_compiler {
    my $append = "";
    my $osvers = (split(/\./,$Config{osvers}))[0]; # Extract first digit in X.Y.Z version numbers
    if ( $Config{osname} =~ /darwin/ && $osvers >= 14
-      && $compiler eq 'gfortran' && $version >= 4.9 ) {
+      && $comp_fam eq 'gfortran' && $version >= 4.9 ) {
       # Add extra libs for gfortran versions >= 4.9 and OS X
       $append = "-lgcc_ext.10.5 -lgcc_s.10.5 -lquadmath";
    }
-   my @libs = @{$COMPLIBS{$compiler}};
+   my @libs = @{$COMPLIBS{$comp_fam}};
    my ($dir, $lib, $test);
    foreach $test (@libs) {
       $dir = gfortran_find_libdir($compiler, $test);
@@ -687,12 +696,18 @@ which can be gfortran, g77, g95 or fort77 (in that order based on usage) and the
 the appropriate link libraries automatically. (This is the 'Generic' 'GNU' database entry
 in the code.)
 
+The target compiler can be explicitly overriden by setting the
+environment variable F77, e.g.
+
+ % setenv F77 "x86_64-pc-linux-gnu-gfortran"
+ % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
+
 The library list which the module returns
 can be explicitly overridden by setting the environment
 variable F77LIBS, e.g.
 
   % setenv F77LIBS "-lfoo -lbar"
-  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->compiler, "\n"'
+  % perl -MExtUtils::F77 -e 'print ExtUtils::F77->runtime, "\n"'
   ...
 
 =head1 SYNOPSIS
