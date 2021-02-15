@@ -7,7 +7,7 @@ on:
       - '*'
   pull_request:
 jobs:
-  ubuntu:
+  ci:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -20,6 +20,8 @@ jobs:
             release-test: true
           - perl-version: '5.30'
             os: macos-latest
+          - perl-version: '5.30'
+            os: windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: shogo82148/actions-setup-perl@v1
@@ -46,4 +48,6 @@ jobs:
       - run: cpanm -n ExtUtils::MakeMaker && cpanm -n --installdeps .
       - name: Run tests (no coverage)
         if: '!matrix.coverage'
-        run: perl Makefile.PL && HARNESS_OPTIONS='j4' make test
+        env:
+          HARNESS_OPTIONS: j4
+        run: perl Makefile.PL && make test
