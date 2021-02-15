@@ -1,0 +1,44 @@
+name: perl
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+jobs:
+  ubuntu:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        perl-version: ['5.10']
+        include:
+          - perl-version: '5.30'
+            os: ubuntu-latest
+            release-test: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          distribution: strawberry # ignored non-windows
+          perl-version: ${{ matrix.perl-version }}
+      - run: perl -V
+
+      - name: Ubuntu packages
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get -y update && sudo apt-get install build-essential gfortran
+
+      - name: Run release tests # before others as may install useful stuff
+        if: ${{ matrix.release-test }}
+        env:
+          RELEASE_TESTING: 1
+        run: |
+          cpanm -n --installdeps --with-develop .
+          prove -lr xt
+
+      - run: cpanm -n ExtUtils::MakeMaker && cpanm -n --installdeps .
+      - name: Run tests (no coverage)
+        if: '!matrix.coverage'
+        run: perl Makefile.PL && HARNESS_OPTIONS='j4' make test
