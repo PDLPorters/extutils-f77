@@ -51,3 +51,21 @@ jobs:
         env:
           HARNESS_OPTIONS: j4
         run: perl Makefile.PL && make test
+
+  vm:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        vm: [freebsd-vm]
+    steps:
+      - uses: actions/checkout@v2
+      - name: VM
+        if: matrix.vm == 'freebsd-vm'
+        uses: vmactions/freebsd-vm@v0.1.2
+        with:
+          usesh: true
+          run: |
+            freebsd-version
+            cpanm -n ExtUtils::MakeMaker && cpanm -n --installdeps .
+            perl Makefile.PL && HARNESS_OPTIONS='j4' make test
