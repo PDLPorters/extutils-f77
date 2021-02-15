@@ -18,6 +18,8 @@ jobs:
           - perl-version: '5.30'
             os: ubuntu-latest
             release-test: true
+          - perl-version: '5.30'
+            os: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: shogo82148/actions-setup-perl@v1
@@ -29,6 +31,9 @@ jobs:
       - name: Ubuntu packages
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get -y update && sudo apt-get install build-essential gfortran
+      - name: MacOS packages
+        if: matrix.os == 'macos-latest'
+        run: brew reinstall gcc
 
       - name: Run release tests # before others as may install useful stuff
         if: ${{ matrix.release-test }}
