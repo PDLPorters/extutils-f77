@@ -133,7 +133,7 @@ $F77config{MinGW}{GFortran}{Link} = sub {
   gfortran_make_linkline($dir, "gfortran", "/usr/local/lib", "", '-lquadmath');
 };
 $F77config{MinGW}{GFortran}{Trail_} = 1;
-$F77config{MinGW}{GFortran}{Compiler} = "$gfortran";
+$F77config{MinGW}{GFortran}{Compiler} = $gfortran;
 $F77config{MinGW}{GFortran}{Cflags}   = '-O';
 
 ### SunOS (use this as a template for new entries) ###
@@ -240,8 +240,8 @@ $F77config{Solaris}{DEFAULT} = 'F77';
 
 $F77config{Generic}{GNU}{Trail_} = 1;
 $F77config{Generic}{GNU}{Cflags} = ' ';        # <---need this space!
-$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler("$gfortran", 'g77', 'g95', 'fort77');
-$F77config{Generic}{GNU}{Compiler} = find_in_path("$gfortran", 'g77',  'g95','fort77');
+$F77config{Generic}{GNU}{Link}   = link_gnufortran_compiler($gfortran, 'g77', 'g95', 'fort77');
+$F77config{Generic}{GNU}{Compiler} = find_in_path($gfortran, 'g77',  'g95','fort77');
 
 $F77config{Generic}{DEFAULT}     = 'GNU';
 
@@ -250,7 +250,7 @@ $F77config{Generic}{DEFAULT}     = 'GNU';
 $F77config{Cygwin}{GNU}{Trail_} = 1;
 $F77config{Cygwin}{GNU}{Cflags} = '-O';        # <---need this space!
 $F77config{Cygwin}{GNU}{Link}   = link_gnufortran_compiler('g77', 'gfortran', 'g95', 'fort77');
-$F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', "$gfortran", 'g95','fort77');
+$F77config{Cygwin}{GNU}{Compiler} = find_in_path('g77', $gfortran, 'g95','fort77');
 
 $F77config{Cygwin}{DEFAULT}     = 'GNU';
 
@@ -318,7 +318,7 @@ if (ucfirst($Config{'osname'}) eq "Irix")
       $libs = "-L/usr/lib -lF77 -lI77 -lU77 -lisam -lm";
    }
    $F77config{Irix}{F77}{Cflags}   = "$abi $mips";
-   $F77config{Irix}{F77}{Link}     = "$libs";
+   $F77config{Irix}{F77}{Link}     = $libs;
    $F77config{Irix}{F77}{Trail_}   = 1;
    $F77config{Irix}{F77}{Compiler} = "f77 $abi";
 
@@ -352,7 +352,7 @@ $F77config{Freebsd}{GFortran}{Link} = sub {
   gfortran_make_linkline($dir, "gfortran", "/usr/local/lib", "");
 };
 $F77config{Freebsd}{GFortran}{Trail_} = 1;
-$F77config{Freebsd}{GFortran}{Compiler} = "$gfortran";
+$F77config{Freebsd}{GFortran}{Compiler} = $gfortran;
 $F77config{Freebsd}{GFortran}{Cflags}   = '-O2';
 
 $F77config{Freebsd}{DEFAULT}     = 'GFortran';
@@ -428,7 +428,7 @@ sub import {
 
       # If it doesn't work try Generic + GNU77
 
-      unless (("$Runtime" ne "-LSNAFU -lwontwork") && $ok) {
+      unless (($Runtime ne "-LSNAFU -lwontwork") && $ok) {
          $system   =
          $Config{cc} =~ /\bgcc/ && $^O =~ /MSWin32/i ? "MinGW"
                                  : $^O =~ /Freebsd/i ? "Freebsd"
@@ -597,7 +597,7 @@ sub testcompiler {
 
 sub gcclibs {
    my $flibs = shift; # Fortran libs
-   my $isgcc = $Config{'cc'} eq "$gcc";
+   my $isgcc = $Config{'cc'} eq $gcc;
    if (!$isgcc && $^O ne 'VMS') {
       debug "Checking for gcc in disguise:\n";
       $isgcc = 1 if $Config{gccversion};
