@@ -335,7 +335,7 @@ $F77config{Aix}{DEFAULT}     = 'F77';
 ### FreeBSD ###
 
 if($^O =~ /Freebsd/i) {
-  $gfortran = 'gfortran48'; # requires rewrite
+  $gfortran = 'gfortran';
   $fallback_compiler = 'G77';
 }
 

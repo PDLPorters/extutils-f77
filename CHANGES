@@ -1,6 +1,9 @@
 ExtUtils::F77 Changes list 
 --------------------------
 
+* Parse fortran compilers with complicated names - thanks @d-lamb
+* Get compiler from %ENV - thanks @d-lamb
+
 v1.25 released Jan 27th 2020
 ---------------------------
 
