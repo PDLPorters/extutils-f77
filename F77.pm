@@ -8,7 +8,7 @@ use Text::ParseWords;
 use File::Which qw(which);
 use List::Util qw(first);
 
-our $VERSION = "1.25";
+our $VERSION = "1.26";
 our $DEBUG;
 
 sub debug { return if !$DEBUG; warn @_ }
