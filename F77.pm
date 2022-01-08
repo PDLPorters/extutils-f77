@@ -575,7 +575,7 @@ sub testcompiler {
    debug "Command: $Compiler $Cflags $file.f -o ${file}_exe";
    system "$Compiler $Cflags $file.f -o ${file}_exe";
    debug "Executing the test program...\n";
-   if (`${file}_exe` ne " Hello World\n") {
+   if ((`${file}_exe`||'') ne " Hello World\n") {
       warn "Test of Fortran Compiler FAILED. \n";
       warn "Do not know how to compile Fortran on your system\n";
       $ret=0;
