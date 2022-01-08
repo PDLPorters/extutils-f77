@@ -572,8 +572,9 @@ sub testcompiler {
    print OUT "      end\n";
    close(OUT);
    debug "Compiling the test Fortran program...\n";
-   debug "Command: $Compiler $Cflags $file.f -o ${file}_exe";
-   system "$Compiler $Cflags $file.f -o ${file}_exe";
+   my $cmd = "$Compiler $Cflags $file.f -o ${file}_exe";
+   debug "Command: $cmd";
+   system $cmd;
    debug "Executing the test program...\n";
    if ((`${file}_exe`||'') ne " Hello World\n") {
       warn "Test of Fortran Compiler FAILED. \n";
