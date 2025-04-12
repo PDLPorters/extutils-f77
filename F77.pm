@@ -370,6 +370,12 @@ $F77config{VMS}{DEFAULT}     = 'Fortran';
 $F77config{Darwin}{GNU} = $F77config{Generic}{GNU};
 $F77config{Darwin}{DEFAULT}     = 'GNU';
 
+### GNU/Hurd ###
+
+$F77config{Gnu}{GNU}     = $F77config{Generic}{GNU};
+
+$F77config{Gnu}{DEFAULT} = 'GNU';
+
 ############ End of database is here ############
 
 sub get; # See below
